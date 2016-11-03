@@ -15,8 +15,10 @@ Convolution::~Convolution()
 
 void Convolution::on_pushButton_clicked()
 {
-    double arr[] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
-    getWindow()->getRawImage()->conv(arr, 3, 3, 2.0, -1, VadimImage::all);
+    int size;
+    double *arr = stringToChar(ui->plainTextEdit->toPlainText(), size);
+
+    getWindow()->getRawImage()->conv(arr, ui->spinBox->value(), ui->spinBox_2->value(), ui->doubleSpinBox->value(), -1, VadimImage::all);
     getWindow()->displayImage();
     getWindow()->updateHistogram();
 }
@@ -26,4 +28,18 @@ MainWindow *Convolution::getWindow()
     QWidget* widget = this;
     while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
     return qobject_cast<MainWindow *>(widget);
+}
+
+double *Convolution::stringToChar(QString a, int &size)
+{
+    QStringList list = a.split(" ",QString::SkipEmptyParts);
+
+    size = list.length();
+    double *arr = new double[size];
+
+    int count = 0;
+    foreach(QString num, list)
+        arr[count++] = num.toDouble();
+
+    return arr;
 }

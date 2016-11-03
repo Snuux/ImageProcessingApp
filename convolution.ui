@@ -29,15 +29,31 @@
          </item>
          <item>
           <widget class="QSpinBox" name="spinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="value">
-            <number>3</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QSpinBox" name="spinBox_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="value">
-            <number>3</number>
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox">
+           <property name="text">
+            <string>Auto</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -48,7 +64,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Coefficient:</string>
+            <string>Divider:</string>
            </property>
           </widget>
          </item>
@@ -68,6 +84,13 @@
         </layout>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="text">
+        <string>Normalize</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
@@ -94,11 +117,24 @@
    <item>
     <widget class="QPlainTextEdit" name="plainTextEdit">
      <property name="plainText">
-      <string>111
-111
-111</string>
+      <string>1 1 1 
+1 1 1 
+1 1 1 </string>
      </property>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

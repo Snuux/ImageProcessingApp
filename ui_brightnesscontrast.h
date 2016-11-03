@@ -47,7 +47,7 @@ public:
     {
         if (BrightnessContrast->objectName().isEmpty())
             BrightnessContrast->setObjectName(QStringLiteral("BrightnessContrast"));
-        BrightnessContrast->resize(290, 103);
+        BrightnessContrast->resize(290, 176);
         verticalLayout = new QVBoxLayout(BrightnessContrast);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         gridLayout = new QGridLayout();

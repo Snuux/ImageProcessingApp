@@ -37,6 +37,7 @@ public:
     QSpacerItem *horizontalSpacer;
     QGraphicsView *graphicsView;
     QLineEdit *lineEdit;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *Palette)
     {
@@ -80,6 +81,10 @@ public:
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
 
         verticalLayout->addWidget(lineEdit);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
 
 
         retranslateUi(Palette);

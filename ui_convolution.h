@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -36,12 +37,15 @@ public:
     QLabel *label;
     QSpinBox *spinBox;
     QSpinBox *spinBox_2;
+    QCheckBox *checkBox;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_2;
     QDoubleSpinBox *doubleSpinBox;
+    QCheckBox *checkBox_2;
     QPushButton *pushButton;
     QSpacerItem *horizontalSpacer;
     QPlainTextEdit *plainTextEdit;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *Convolution)
     {
@@ -63,15 +67,23 @@ public:
 
         spinBox = new QSpinBox(Convolution);
         spinBox->setObjectName(QStringLiteral("spinBox"));
-        spinBox->setValue(3);
+        spinBox->setEnabled(false);
+        spinBox->setValue(0);
 
         horizontalLayout->addWidget(spinBox);
 
         spinBox_2 = new QSpinBox(Convolution);
         spinBox_2->setObjectName(QStringLiteral("spinBox_2"));
-        spinBox_2->setValue(3);
+        spinBox_2->setEnabled(false);
+        spinBox_2->setValue(0);
 
         horizontalLayout->addWidget(spinBox_2);
+
+        checkBox = new QCheckBox(Convolution);
+        checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setChecked(true);
+
+        horizontalLayout->addWidget(checkBox);
 
 
         verticalLayout_2->addLayout(horizontalLayout);
@@ -97,6 +109,11 @@ public:
 
         horizontalLayout_3->addLayout(verticalLayout_2);
 
+        checkBox_2 = new QCheckBox(Convolution);
+        checkBox_2->setObjectName(QStringLiteral("checkBox_2"));
+
+        horizontalLayout_3->addWidget(checkBox_2);
+
         pushButton = new QPushButton(Convolution);
         pushButton->setObjectName(QStringLiteral("pushButton"));
 
@@ -114,6 +131,10 @@ public:
 
         verticalLayout->addWidget(plainTextEdit);
 
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
+
 
         retranslateUi(Convolution);
 
@@ -124,11 +145,13 @@ public:
     {
         Convolution->setWindowTitle(QApplication::translate("Convolution", "Form", 0));
         label->setText(QApplication::translate("Convolution", "Matrix Size:", 0));
-        label_2->setText(QApplication::translate("Convolution", "Coefficient:", 0));
+        checkBox->setText(QApplication::translate("Convolution", "Auto", 0));
+        label_2->setText(QApplication::translate("Convolution", "Divider:", 0));
+        checkBox_2->setText(QApplication::translate("Convolution", "Normalize", 0));
         pushButton->setText(QApplication::translate("Convolution", "Ok", 0));
-        plainTextEdit->setPlainText(QApplication::translate("Convolution", "111\n"
-"111\n"
-"111", 0));
+        plainTextEdit->setPlainText(QApplication::translate("Convolution", "1 1 1 \n"
+"1 1 1 \n"
+"1 1 1 ", 0));
     } // retranslateUi
 
 };

@@ -98,7 +98,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadImage()
 {
-    image.load("C:/Users/snuux/Documents/Qt Projects/build-ImageBrowser-Desktop_Qt_5_7_0_MinGW_32bit-Debug/Lena.png");
+    image.load("C:/Users/snuux/Documents/Qt Projects/build-ImageBrowser-Desktop_Qt_5_7_0_MinGW_32bit-Debug/LenaCut.png");
     //image = image.convertToFormat(QImage::Format_RGB32);
 
     rawImage = new VadimImage(image);
@@ -117,50 +117,52 @@ void MainWindow::displayImage()
 
 void MainWindow::updateHistogram()
 {
-        QVector<double> x(256);
-        for (int i = 0; i < 256; i++)
-            x[i] = i;
+    getRawImage()->doHistogram();
 
-        QVector<double> y(256);
-        for (int i = 0; i < 256; i++)
-            y[i] = rawImage->getHistogramBlue()[i];
-        QVector<double> y1(256);
-        for (int i = 0; i < 256; i++)
-            y1[i] = rawImage->getHistogramGreen()[i];
-        QVector<double> y2(256);
-        for (int i = 0; i < 256; i++)
-            y2[i] = rawImage->getHistogramRed()[i];
+    QVector<double> x(256);
+    for (int i = 0; i < 256; i++)
+        x[i] = i;
 
-        QVector<double> y3(256); //grey
-        for (int i = 0; i < 256; i++)
-            y3[i] = rawImage->getHistogramRed()[i]+
-                    rawImage->getHistogramGreen()[i]+
-                    rawImage->getHistogramBlue()[i];
+    QVector<double> y(256);
+    for (int i = 0; i < 256; i++)
+        y[i] = rawImage->getHistogramBlue()[i];
+    QVector<double> y1(256);
+    for (int i = 0; i < 256; i++)
+        y1[i] = rawImage->getHistogramGreen()[i];
+    QVector<double> y2(256);
+    for (int i = 0; i < 256; i++)
+        y2[i] = rawImage->getHistogramRed()[i];
 
-        barB->setData(x, y);
-        barB->setPen(QPen(QColor(0, 0, 255, 25)));
-        barB->setVisible(false);
-        barG->setData(x, y1);
-        barG->setPen(QPen(QColor(0, 255, 0, 25)));
-        barG->setVisible(false);
-        barR->setData(x, y2);
-        barR->setPen(QPen(QColor(255, 0, 0, 25)));
-        barR->setVisible(false);
-        barAll->setData(x, y3);
-        barAll->setPen(QPen(QColor(100, 100, 100, 255)));
+    QVector<double> y3(256); //grey
+    for (int i = 0; i < 256; i++)
+        y3[i] = rawImage->getHistogramRed()[i]+
+                rawImage->getHistogramGreen()[i]+
+                rawImage->getHistogramBlue()[i];
 
-        ui->customPlot->xAxis->setLabel("Brightness");
-        ui->customPlot->yAxis->setLabel("Pixels");
+    barB->setData(x, y);
+    barB->setPen(QPen(QColor(0, 0, 255, 25)));
+    barB->setVisible(false);
+    barG->setData(x, y1);
+    barG->setPen(QPen(QColor(0, 255, 0, 25)));
+    barG->setVisible(false);
+    barR->setData(x, y2);
+    barR->setPen(QPen(QColor(255, 0, 0, 25)));
+    barR->setVisible(false);
+    barAll->setData(x, y3);
+    barAll->setPen(QPen(QColor(100, 100, 100, 255)));
 
-        ui->customPlot->xAxis->setRange(0, 255);
+    //ui->customPlot->xAxis->setLabel("Brightness");
+    //ui->customPlot->yAxis->setLabel("Pixels");
 
-        int maxY = 0;
-        for (int i = 1; i < y.size() - 1; i++)
-            if (maxY < y[i] || maxY < y1[i] || maxY < y2[i] || maxY < y3[i])
-                maxY = qMax(qMax(y[i], y1[i]), qMax(y2[i], y3[i]));
+    ui->customPlot->xAxis->setRange(0, 255);
 
-        ui->customPlot->yAxis->setRange(0, maxY);
-        ui->customPlot->replot();
+    int maxY = 0;
+    for (int i = 1; i < y.size() - 1; i++)
+        if (maxY < y[i] || maxY < y1[i] || maxY < y2[i] || maxY < y3[i])
+            maxY = qMax(qMax(y[i], y1[i]), qMax(y2[i], y3[i]));
+
+    ui->customPlot->yAxis->setRange(0, maxY);
+    ui->customPlot->replot();
 }
 
 void MainWindow::wait(int millisecondsToWait)
@@ -222,10 +224,10 @@ void MainWindow::slotChangeHistogramChannels(QString str)
 
 void MainWindow::on_groupBox_toggled(bool arg1)
 {
-    if (arg1 == true)
-        ui->groupBox->adjustSize();
-    else
-        ui->groupBox->resize(ui->groupBox->width(), 15);
+    //if (arg1 == true)
+    //    ui->groupBox->adjustSize();
+    //else
+    //    ui->groupBox->resize(ui->groupBox->width(), 15);
 }
 
 void MainWindow::on_pushButton_clicked()

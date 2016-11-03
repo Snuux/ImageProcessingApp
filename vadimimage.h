@@ -5,12 +5,17 @@
 #include <QImage>
 #include <QList>
 #include <QtMath>
+#include <cmath>
 
 class VadimImage
 {
     unsigned char *originalPixels;
     unsigned char *stepPixels;
     unsigned char *pixels;
+
+    double *hsvOriginalPixels;
+    double *hsvStepPixels;
+    double *hsvPixels;
 
     //VadimImage previous; //TODO
 
@@ -48,6 +53,12 @@ public:
 
     //VadimImage &operator=(const VadimImage &other); //TODO
 
+    void copyHSLtoRGBA(double *a, unsigned char *b);
+    void copyRGBAtoHSL(unsigned char *a, double *b);
+
+    void copyHSVtoRGBA(double *a, unsigned char *b);
+    void copyRGBAtoHSV(unsigned char *a, double *b);
+
     void doHistogram();
     void editHistogram3(int x1, int x2, double k, ImageChannel ch);
     void editHistogram4(int x1, int x2, double k1, double k2, ImageChannel ch);
@@ -68,6 +79,10 @@ public:
     //void zoomBicubic(int w, int h);
 
     void conv(double *arr, int w, int h, double coef, int alg, ImageChannel ch);
+    void medianFilter(int n, ImageChannel ch);
+    void sharpenFilter(int n, ImageChannel ch);
+
+    void sortArray(unsigned char *a, int size);
 
     void flipHorizontal();
     void flipVertical();
@@ -76,6 +91,11 @@ public:
     void rotate180();
 
     void rotate(int angle);
+
+    void curveCorrection(double *arr, int size, ImageChannel ch);
+    void hsvCorrection(short int h, short int s, short int v);
+
+    void blackWhitePoints(unsigned char a, unsigned char b);
 
     QImage getImage();
 

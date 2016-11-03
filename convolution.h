@@ -4,6 +4,9 @@
 #include <QWidget>
 #include "mainwindow.h"
 
+#include <QString>
+#include <QStringList>
+
 namespace Ui {
 class Convolution;
 }
@@ -23,6 +26,7 @@ private:
     Ui::Convolution *ui;
 
     MainWindow *getWindow();
+    double *stringToChar(QString a, int &size);
 };
 
 #endif // CONVOLUTION_H

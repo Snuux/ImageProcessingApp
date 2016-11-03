@@ -22,7 +22,11 @@ SOURCES += main.cpp\
     binarization.cpp \
     togreyscale.cpp \
     scalerotate.cpp \
-    convolution.cpp
+    convolution.cpp \
+    curvecorrection.cpp \
+    hsvcorrection.cpp \
+    blackwhitepoint.cpp \
+    medianborderfilter.cpp
 
 HEADERS  += mainwindow.h \
     vadimimage.h \
@@ -33,7 +37,11 @@ HEADERS  += mainwindow.h \
     binarization.h \
     togreyscale.h \
     scalerotate.h \
-    convolution.h
+    convolution.h \
+    curvecorrection.h \
+    hsvcorrection.h \
+    blackwhitepoint.h \
+    medianborderfilter.h
 
 FORMS    += mainwindow.ui \
     histogramchange.ui \
@@ -42,7 +50,11 @@ FORMS    += mainwindow.ui \
     binarization.ui \
     togreyscale.ui \
     scalerotate.ui \
-    convolution.ui
+    convolution.ui \
+    curvecorrection.ui \
+    hsvcorrection.ui \
+    blackwhitepoint.ui \
+    medianborderfilter.ui
 
 DISTFILES += \
     libs/qxtnamespace.qdoc

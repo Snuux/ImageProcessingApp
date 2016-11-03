@@ -52,7 +52,7 @@ public:
     {
         if (ToGreyscale->objectName().isEmpty())
             ToGreyscale->setObjectName(QStringLiteral("ToGreyscale"));
-        ToGreyscale->resize(400, 300);
+        ToGreyscale->resize(400, 339);
         verticalLayout = new QVBoxLayout(ToGreyscale);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         pushButton = new QPushButton(ToGreyscale);

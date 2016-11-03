@@ -15,24 +15,26 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGraphicsView>
-#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "binarization.h"
+#include "blackwhitepoint.h"
 #include "brightnesscontrast.h"
 #include "convolution.h"
+#include "curvecorrection.h"
 #include "histogramchange.h"
+#include "hsvcorrection.h"
 #include "libs/qcustomplot.h"
+#include "medianborderfilter.h"
 #include "palette.h"
 #include "scalerotate.h"
 #include "togreyscale.h"
@@ -54,14 +56,7 @@ public:
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_8;
     QHBoxLayout *horizontalLayout;
-    QGraphicsView *graphicsView;
-    QGroupBox *groupBox;
-    QVBoxLayout *verticalLayout_3;
-    QComboBox *comboBox;
-    QCustomPlot *customPlot;
-    QHBoxLayout *horizontalLayout_2;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QVBoxLayout *verticalLayout_14;
     QTabWidget *tabWidget;
     QWidget *tab;
     QVBoxLayout *verticalLayout_4;
@@ -85,7 +80,26 @@ public:
     QVBoxLayout *verticalLayout_9;
     Convolution *widget_7;
     QWidget *tab_6;
-    QSpacerItem *verticalSpacer;
+    QVBoxLayout *verticalLayout_10;
+    CurveCorrection *widget_8;
+    QWidget *tab_9;
+    QVBoxLayout *verticalLayout_11;
+    HSVCorrection *widget_9;
+    QWidget *tab_10;
+    QVBoxLayout *verticalLayout_12;
+    BlackWhitePoint *widget_10;
+    QWidget *tab_11;
+    QVBoxLayout *verticalLayout_13;
+    MedianBorderFilter *widget_11;
+    QWidget *tab_12;
+    QWidget *tab_13;
+    QComboBox *comboBox;
+    QHBoxLayout *horizontalLayout_2;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QVBoxLayout *verticalLayout_15;
+    QGraphicsView *graphicsView;
+    QCustomPlot *customPlot;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuImage;
@@ -101,7 +115,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1000, 495);
+        MainWindow->resize(1000, 414);
         MainWindow->setMinimumSize(QSize(1000, 0));
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
@@ -130,77 +144,27 @@ public:
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        graphicsView = new QGraphicsView(centralWidget);
-        graphicsView->setObjectName(QStringLiteral("graphicsView"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        verticalLayout_14 = new QVBoxLayout();
+        verticalLayout_14->setSpacing(6);
+        verticalLayout_14->setObjectName(QStringLiteral("verticalLayout_14"));
+        tabWidget = new QTabWidget(centralWidget);
+        tabWidget->setObjectName(QStringLiteral("tabWidget"));
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(graphicsView->sizePolicy().hasHeightForWidth());
-        graphicsView->setSizePolicy(sizePolicy);
-        graphicsView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
-        graphicsView->setResizeAnchor(QGraphicsView::NoAnchor);
-
-        horizontalLayout->addWidget(graphicsView);
-
-        groupBox = new QGroupBox(centralWidget);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
-        groupBox->setSizePolicy(sizePolicy1);
-        groupBox->setFlat(false);
-        groupBox->setCheckable(true);
-        verticalLayout_3 = new QVBoxLayout(groupBox);
-        verticalLayout_3->setSpacing(0);
-        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        verticalLayout_3->setContentsMargins(-1, 9, -1, 9);
-        comboBox = new QComboBox(groupBox);
-        comboBox->setObjectName(QStringLiteral("comboBox"));
-
-        verticalLayout_3->addWidget(comboBox);
-
-        customPlot = new QCustomPlot(groupBox);
-        customPlot->setObjectName(QStringLiteral("customPlot"));
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
-        customPlot->setSizePolicy(sizePolicy2);
-        customPlot->setMinimumSize(QSize(300, 200));
-        customPlot->setBaseSize(QSize(0, 200));
-
-        verticalLayout_3->addWidget(customPlot);
-
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        pushButton = new QPushButton(groupBox);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-
-        horizontalLayout_2->addWidget(pushButton);
-
-        pushButton_2 = new QPushButton(groupBox);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setMaximumSize(QSize(80, 16777215));
-
-        horizontalLayout_2->addWidget(pushButton_2);
-
-
-        verticalLayout_3->addLayout(horizontalLayout_2);
-
-        tabWidget = new QTabWidget(groupBox);
-        tabWidget->setObjectName(QStringLiteral("tabWidget"));
         sizePolicy.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
         tabWidget->setSizePolicy(sizePolicy);
+        tabWidget->setTabPosition(QTabWidget::West);
+        tabWidget->setTabShape(QTabWidget::Rounded);
+        tabWidget->setUsesScrollButtons(true);
+        tabWidget->setDocumentMode(false);
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
-        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(tab->sizePolicy().hasHeightForWidth());
-        tab->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(tab->sizePolicy().hasHeightForWidth());
+        tab->setSizePolicy(sizePolicy1);
         verticalLayout_4 = new QVBoxLayout(tab);
         verticalLayout_4->setSpacing(0);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -214,8 +178,8 @@ public:
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
-        sizePolicy3.setHeightForWidth(tab_2->sizePolicy().hasHeightForWidth());
-        tab_2->setSizePolicy(sizePolicy3);
+        sizePolicy1.setHeightForWidth(tab_2->sizePolicy().hasHeightForWidth());
+        tab_2->setSizePolicy(sizePolicy1);
         verticalLayout_2 = new QVBoxLayout(tab_2);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -288,16 +252,115 @@ public:
         tabWidget->addTab(tab_5, QString());
         tab_6 = new QWidget();
         tab_6->setObjectName(QStringLiteral("tab_6"));
+        verticalLayout_10 = new QVBoxLayout(tab_6);
+        verticalLayout_10->setSpacing(6);
+        verticalLayout_10->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
+        widget_8 = new CurveCorrection(tab_6);
+        widget_8->setObjectName(QStringLiteral("widget_8"));
+
+        verticalLayout_10->addWidget(widget_8);
+
         tabWidget->addTab(tab_6, QString());
+        tab_9 = new QWidget();
+        tab_9->setObjectName(QStringLiteral("tab_9"));
+        verticalLayout_11 = new QVBoxLayout(tab_9);
+        verticalLayout_11->setSpacing(6);
+        verticalLayout_11->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_11->setObjectName(QStringLiteral("verticalLayout_11"));
+        widget_9 = new HSVCorrection(tab_9);
+        widget_9->setObjectName(QStringLiteral("widget_9"));
 
-        verticalLayout_3->addWidget(tabWidget);
+        verticalLayout_11->addWidget(widget_9);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        tabWidget->addTab(tab_9, QString());
+        tab_10 = new QWidget();
+        tab_10->setObjectName(QStringLiteral("tab_10"));
+        verticalLayout_12 = new QVBoxLayout(tab_10);
+        verticalLayout_12->setSpacing(6);
+        verticalLayout_12->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_12->setObjectName(QStringLiteral("verticalLayout_12"));
+        widget_10 = new BlackWhitePoint(tab_10);
+        widget_10->setObjectName(QStringLiteral("widget_10"));
 
-        verticalLayout_3->addItem(verticalSpacer);
+        verticalLayout_12->addWidget(widget_10);
+
+        tabWidget->addTab(tab_10, QString());
+        tab_11 = new QWidget();
+        tab_11->setObjectName(QStringLiteral("tab_11"));
+        verticalLayout_13 = new QVBoxLayout(tab_11);
+        verticalLayout_13->setSpacing(6);
+        verticalLayout_13->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_13->setObjectName(QStringLiteral("verticalLayout_13"));
+        widget_11 = new MedianBorderFilter(tab_11);
+        widget_11->setObjectName(QStringLiteral("widget_11"));
+
+        verticalLayout_13->addWidget(widget_11);
+
+        tabWidget->addTab(tab_11, QString());
+        tab_12 = new QWidget();
+        tab_12->setObjectName(QStringLiteral("tab_12"));
+        tabWidget->addTab(tab_12, QString());
+        tab_13 = new QWidget();
+        tab_13->setObjectName(QStringLiteral("tab_13"));
+        tabWidget->addTab(tab_13, QString());
+
+        verticalLayout_14->addWidget(tabWidget);
+
+        comboBox = new QComboBox(centralWidget);
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+
+        verticalLayout_14->addWidget(comboBox);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        pushButton = new QPushButton(centralWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        horizontalLayout_2->addWidget(pushButton);
+
+        pushButton_2 = new QPushButton(centralWidget);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setMaximumSize(QSize(80, 16777215));
+
+        horizontalLayout_2->addWidget(pushButton_2);
 
 
-        horizontalLayout->addWidget(groupBox);
+        verticalLayout_14->addLayout(horizontalLayout_2);
+
+
+        horizontalLayout->addLayout(verticalLayout_14);
+
+        verticalLayout_15 = new QVBoxLayout();
+        verticalLayout_15->setSpacing(6);
+        verticalLayout_15->setObjectName(QStringLiteral("verticalLayout_15"));
+        graphicsView = new QGraphicsView(centralWidget);
+        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(graphicsView->sizePolicy().hasHeightForWidth());
+        graphicsView->setSizePolicy(sizePolicy2);
+        graphicsView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
+        graphicsView->setResizeAnchor(QGraphicsView::NoAnchor);
+
+        verticalLayout_15->addWidget(graphicsView);
+
+        customPlot = new QCustomPlot(centralWidget);
+        customPlot->setObjectName(QStringLiteral("customPlot"));
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
+        customPlot->setSizePolicy(sizePolicy3);
+        customPlot->setMinimumSize(QSize(300, 100));
+        customPlot->setBaseSize(QSize(0, 200));
+
+        verticalLayout_15->addWidget(customPlot);
+
+
+        horizontalLayout->addLayout(verticalLayout_15);
 
 
         verticalLayout_8->addLayout(horizontalLayout);
@@ -349,7 +412,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(6);
+        tabWidget->setCurrentIndex(10);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -367,7 +430,19 @@ public:
         actionUndo->setText(QApplication::translate("MainWindow", "Undo", 0));
         actionRedo->setText(QApplication::translate("MainWindow", "Redo", 0));
         actionConvert_to_Greyscale->setText(QApplication::translate("MainWindow", "Convert to Greyscale", 0));
-        groupBox->setTitle(QApplication::translate("MainWindow", "Histogram", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "1. Histogram change", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "2. Brightness and Contrast", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "3. Palette", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_7), QApplication::translate("MainWindow", "4. Binarization", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_8), QApplication::translate("MainWindow", "5. To Greyscale", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "6. Scale and Rotate", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("MainWindow", "7. Matrix Convolution", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_6), QApplication::translate("MainWindow", "8. Gamma-, S-, Custom Curves", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_9), QApplication::translate("MainWindow", "9. HSV Correction", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_10), QApplication::translate("MainWindow", "10. Choose B/W Points", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_11), QApplication::translate("MainWindow", "11-12. Median, Sharpen Filters", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_12), QApplication::translate("MainWindow", "13. Color Add", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_13), QApplication::translate("MainWindow", "14. Box, Gauss Filters", 0));
         comboBox->clear();
         comboBox->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "RGB Channels", 0)
@@ -377,14 +452,6 @@ public:
         );
         pushButton->setText(QApplication::translate("MainWindow", "Apply", 0));
         pushButton_2->setText(QApplication::translate("MainWindow", "Revert", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "1. Histogram change", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "2. Brightness and Contrast", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "3. Palette", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_7), QApplication::translate("MainWindow", "4. Binarization", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_8), QApplication::translate("MainWindow", "5. To Greyscale", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "6. Scale and Rotate", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("MainWindow", "7. Matrix Convolution", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_6), QApplication::translate("MainWindow", "8. Gamma-, S-, Custom Curves", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0));
         menuFilter->setTitle(QApplication::translate("MainWindow", "Filter", 0));

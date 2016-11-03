@@ -88,6 +88,14 @@ VadimImage::VadimImage(QImage& img)
         stepPixels[i] = img.constBits()[i];
     }
 
+    hsvPixels = new double[width*height*3];
+    hsvOriginalPixels = new double[width*height*3];
+    hsvStepPixels = new double[width*height*3];
+
+    copyRGBAtoHSV(pixels, hsvPixels);
+    copyRGBAtoHSV(originalPixels, hsvOriginalPixels);
+    copyRGBAtoHSV(stepPixels, hsvStepPixels);
+
     doHistogram();
 }
 
@@ -96,6 +104,303 @@ VadimImage::~VadimImage()
     delete[] pixels;
     delete[] originalPixels;
     delete[] stepPixels;
+
+    delete[] hsvPixels;
+    delete[] hsvOriginalPixels;
+    delete[] hsvStepPixels;
+}
+
+void VadimImage::copyHSLtoRGBA(double *a1, unsigned char *a2)
+{
+    unsigned char r,g,b;
+    double h,s,l;
+    double c, x, m;
+    for (int i = 0, j = 0; i < width * height * 3; i+=3, j+=4)
+    {
+        h = a1[i];
+        s = a1[i+1] ;
+        l = a1[i+2];
+
+        c = (1 - qAbs(2*l - 1)) * s;
+        x = c * (1 - qAbs(fmod((h / 60), 2.0) - 1));
+        m = l - c/2;
+
+        if (h >= 0 && h < 60) {r = c; g = x; b = 0;}
+        else if (h >= 60 && h < 120) {r = x; g = c; b = 0;}
+        else if (h >= 120 && h < 180) {r = 0; g = c; b = x;}
+        else if (h >= 180 && h < 240) {r = 0; g = x; b = c;}
+        else if (h >= 240 && h < 300) {r = x; g = 0; b = c;}
+        else if (h >= 300 && h < 360) {r = c; g = 0; b = x;}
+
+        a2[j] = (b+m) * 255.0;
+        a2[j+1] = (g+m) * 255.0;
+        a2[j+2] = (r+m) * 255.0;
+    }
+}
+void VadimImage::copyRGBAtoHSL(unsigned char *a1, double *a2)
+{
+    double h,s,l;
+    double m1, m2, cmax, cmin, det, r,g,b;
+    for (int i = 0, j = 0; i < width * height * 4; i+=4, j+=3)
+    {
+        b = a1[i]/255.0;
+        g = a1[i+1]/255.0;
+        r = a1[i+2]/255.0;
+
+        m1 = qMin(b, g);
+        m2 = qMin(g, r);
+        cmin = qMin(m1, m2);
+
+        m1 = qMax(b, g);
+        m2 = qMax(g, r);
+        cmax = qMax(m1, m2);
+
+        det = cmax - cmin;
+
+        if (det == 0)
+            h = 0;
+        else if (cmax == r)
+            h = 60*fmod((g-b)/det,6.0);
+        else if (cmax == g)
+            h = 60*(((b-r)/det)+2);
+        else //b
+            h = 60*(((r-g)/det)+4);
+
+        l = (cmax + cmin) / 2;
+
+        if (det == 0)
+            s = 0;
+        else
+            s = det / (1 - qAbs(2*l-1));
+
+        a2[j] = h;
+        a2[j+1] = s;
+        a2[j+2] = l;
+    }
+}
+
+void VadimImage::copyHSVtoRGBA(double *a1, unsigned char *a2)
+{
+    double r,g,b ,ar,ag,ab;
+    double c,x,m,i,hh,ff, p,q,t; long tt;
+    double h,s,v;
+    double vmin, a, vinc, vdec;
+    for (int i = 0, j = 0; i < width * height * 3; i+=3, j+=4)
+    {
+        h = a1[i];
+        s = a1[i+1];
+        v = a1[i+2];
+
+        //vmin = ((100 - s) * v) / 100;
+        //a = (v - vmin)*(fmod(h,60))/60;
+        //vinc = vmin + a;
+        //vdec = v - a;
+        //
+        //if (h >= 0 && h < 60) {r = v; g = vinc; b = vmin;}
+        //else if (h >= 60 && h < 120) {r = vdec; g = v; b = vmin;}
+        //else if (h >= 120 && h < 180) {r = vmin; g = v; b = vinc;}
+        //else if (h >= 180 && h < 240) {r = vmin; g = vdec; b = v;}
+        //else if (h >= 240 && h < 300) {r = vinc; g = vmin; b = v;}
+        //else if (h >= 300 && h < 360) {r = v; g = vmin; b = vdec;}
+        //
+        //ar = r * 255;
+        //ag = g * 255;
+        //ab = b * 255;
+        //
+        //a2[j] = ab;
+        //a2[j+1] = ag;
+        //a2[j+2] = ar;
+
+        c = v * s;
+        x = c * (1 - qAbs( fmod(h/60,2) - 1) );//qAbs(fmod((h / 60), 2.0) - 1));
+        m = v - c;
+
+        if (h >= 0 && h < 60) {r = c; g = x; b = 0;}
+        else if (h >= 60 && h < 120) {r = x; g = c; b = 0;}
+        else if (h >= 120 && h < 180) {r = 0; g = c; b = x;}
+        else if (h >= 180 && h < 240) {r = 0; g = x; b = c;}
+        else if (h >= 240 && h < 300) {r = x; g = 0; b = c;}
+        else if (h >= 300 && h < 360) {r = c; g = 0; b = x;}
+
+        ab = (b+m) * 255.0;
+        ag = (g+m) * 255.0;
+        ar = (r+m) * 255.0;
+
+        a2[j] =   ab;
+        a2[j+1] = ag;
+        a2[j+2] = ar;
+
+        /*hh = h / 60.0;
+        tt = (long)hh;
+        ff = hh - tt;
+        p = v * (1.0 - s);
+        q = v * (1.0 - (s * ff));
+        t = v * (1.0 - (s * (1.0 - ff)));
+
+        switch(tt) {
+        case 0:
+            r = v;
+            g = t;
+            b = p;
+            break;
+        case 1:
+            r = q;
+            g = v;
+            b = p;
+            break;
+        case 2:
+            r = p;
+            g = v;
+            b = t;
+            break;
+
+        case 3:
+            r = p;
+            g = q;
+            b = v;
+            break;
+        case 4:
+            r = t;
+            g = p;
+            b = v;
+            break;
+        case 5:
+        default:
+            r = v;
+            g = p;
+            b = q;
+            break;
+        }*/
+
+        //c = v * s;
+        //hh = h / 60.0;
+        //x = c * (1 - qAbs( (fmod(hh,2)) - 1) );//qAbs(fmod((h / 60), 2.0) - 1));
+        //m = v - c;
+        //
+        //     if (hh >= 0 && hh < 1) {r = c; g = x; b = 0;}
+        //else if (hh >= 1 && hh < 2) {r = x; g = c; b = 0;}
+        //else if (hh >= 2 && hh < 3) {r = 0; g = c; b = x;}
+        //else if (hh >= 3 && hh < 4) {r = 0; g = x; b = c;}
+        //else if (hh >= 4 && hh < 5) {r = x; g = 0; b = c;}
+        //else if (hh >= 5 && hh < 6) {r = c; g = 0; b = x;}
+        //
+        //ab = (b+m) * 255.0;
+        //ag = (g+m) * 255.0;
+        //ar = (r+m) * 255.0;
+        //
+        //a2[j] =   b;
+        //a2[j+1] = g;
+        //a2[j+2] = r;
+    }
+}
+void VadimImage::copyRGBAtoHSV(unsigned char *a1, double *a2)
+{
+    double h,s,v;
+    double m1, m2, cmax, cmin, det, r,g,b ,dd,hh;
+    for (int i = 0, j = 0; i < width * height * 4; i+=4, j+=3)
+    {
+        //qDebug() << a1[i] << a1[i+1] << a1[i+2];
+
+        b = a1[i]/255.0;
+        g = a1[i+1]/255.0;
+        r = a1[i+2]/255.0;
+
+        m1 = qMin(b, g);
+        m2 = qMin(g, r);
+        cmin = qMin(m1, m2);
+
+        m1 = qMax(b, g);
+        m2 = qMax(g, r);
+        cmax = qMax(m1, m2);
+
+        det = cmax - cmin;
+
+        if (det == 0)
+            h = 0;
+        else if (cmax == r)
+        {
+            h = 60*(fmod((g-b)/det, 6));
+        }
+        else if (cmax == g)
+            h = 60*(((b-r)/det) + 2);
+        else //b
+            h = 60*(((r-g)/det) + 4);
+
+        v = cmax;
+
+        if (cmax == 0)
+            s = 0;
+        else
+            s = det/cmax; //cmax;//1 - cmin/cmax;
+
+        if (h < 0) h += 360;
+        else if (h > 360) h -= 360;
+        if (s < 0) s = 0;
+        else if (s > 100) s = 100;
+        if (v < 0) v = 0;
+        else if (v > 100) v = 100;
+
+        a2[j] = h;
+        a2[j+1] = s;
+        a2[j+2] = v;
+
+        //if (cmax == cmin)
+        //    h = 0;
+        //else if (cmax == r)
+        //{
+        //    if (g >= b)
+        //        h = 60 * (g-b) / det + 0;
+        //    else
+        //        h = 60 * (g-b) / det + 360;
+        //}
+        //else if (cmax == g)
+        //    h = 60*(((b-r)/det)+120);
+        //else //b
+        //    h = 60*(((r-g)/det)+240);
+
+        //if (cmax == cmin)
+        //    h = 0;
+        //else if (cmax == r)
+        //    h = 60*fmod((g-b)/det,6);
+        //else if (cmax == g)
+        //    h = 60*(((b-r)/det)+2);
+        //else //b
+        //    h = 60*(((r-g)/det)+4);
+        //
+        //qDebug() << fmod((g-b)/det,6);
+
+        /*if (cmin == r) dd = g-b;
+        else
+        {
+            if (cmin == b) dd = r-g;
+            else dd = b-r;
+        }
+        if (cmin == r) hh = 3;
+        else
+        {
+            if (cmin == b) hh = 1;
+            else hh = 5;
+        }
+
+        h = 60 * (hh - dd / det);
+
+        v = cmax;
+
+        if (cmax == 0)
+            s = 0;
+        else
+            s = det/cmax; //cmax;//1 - cmin/cmax;
+
+        if (cmin == cmax)
+        {
+            h = 0;
+            v = s;
+        }
+
+        a2[j] = h;
+        a2[j+1] = s;
+        a2[j+2] = v;*/
+    }
 }
 
 void VadimImage::doHistogram()
@@ -198,6 +503,7 @@ void VadimImage::autoContrast(VadimImage::ImageChannel ch)
 
     if (ch == VadimImage::all)
     {
+
     }
     //else if (ch == VadimImage::blue)
     //{
@@ -527,77 +833,84 @@ void VadimImage::conv(double *arr, int w, int h, double coef, int alg, VadimImag
 {
     int cw = w/2, ch = h/2;
 
-    int i,j,k,l,m,n;
+    int i,j,k,l,t, sum;
+    int index, aIndex, sIndex;
 
     for (j = ch; j < height - ch; j++)
         for (i = cw; i < width - cw; i++)
-            for (l = 0; l < h; l++)
-                for (k = 0; k < w; k++)
-                {
-                    m = l - ch;
-                    n = k - cw;
-                    pixels[i + j*height] = 0;
-                    pixels[i + j*height] += trunc(stepPixels[i + j*height  +  n + m*h] * arr[k + l*h] * coef);
-                    pixels[i + j*height] /= (w * h);
-                }
+        {
+            index = i + j*width;
 
-    //int index, aIndex, oldIndex;
-    //
-    //for (int j = 0; j < height; j++)
-    //    for (int i = 0; i < width; i++)
-    //    {
-    //        index = i + j*4;
-    //        for (int l = 0; l < h; l++)
-    //            for (int k = 0; k < w; k++)
-    //            {
-    //                aIndex = k + l*4;
-    //                oldIndex = index - (cw - ch*4);
-    //
-    //                pixels[index] = trunc(stepPixels[])
-    //            }
-    //    }
+            for (t = 0; t < 4; t++)
+            {
+                sum = 0;
+                for (l = 0; l < h; l++)
+                    for (k = 0; k < w; k++)
+                    {
+                        aIndex = k + l*w;
+                        sIndex = index + (k-cw + (l-ch)*width);//???? + t;
+                        sum += stepPixels[sIndex*4 + t] * arr[aIndex] * coef;
+                    }
 
+                pixels[index*4 + t] = trunc(sum);
+            }
+        }
+}
 
+void VadimImage::medianFilter(int n, VadimImage::ImageChannel ch)
+{
+    int cn = n/2;
 
-    //for (int i = 0; i < width * height * 4; i+=4)
-    //{
-    //    for (int j = 0; j < w * h * 4; j+=4)
-    //    {
-    //        pixels[i] = stepPixels[j]
-    //    }
-    //}
+    unsigned char *tArr = new unsigned char [n*n];
 
-    //int py, px, ay, ax, mm, nn, ii, jj;
-    //int newIndex, oldIndex, arrIndex;
-    //
-    //for (py = 0; py < height; py++)
-    //{
-    //    for (px = 0; px < width; px++)
-    //    {
-    //        for (ay = 0; ay < h; ay++)
-    //        {
-    //            mm = h - 1 - ay;
-    //            for (ax = 0; ax < w; ax++)
-    //            {
-    //                nn = w - 1 - ax;
-    //
-    //                // index of input signal, used for checking boundary
-    //                ii = py + (ay - ch);
-    //                jj = px + (ax - cw);
-    //
-    //                newIndex = px+py*width;
-    //                oldIndex = ii*width+jj;
-    //                arrIndex = mm*width+nn;
-    //
-    //                // ignore input samples which are out of bound
-    //                if( ii >= 0 && ii < height && jj >= 0 && jj < width )
-    //                    for (int k = 0; k < 4; k++)
-    //                        pixels[newIndex+k] += trunc(stepPixels[oldIndex+k] * arr[arrIndex] * coef);
-    //
-    //            }
-    //        }
-    //    }
-    //}
+    int i,j,k,l,t, count;
+    int index, aIndex, sIndex;
+
+    for (j = 0; j < height; j++)
+        for (i = 0; i < width; i++)
+        {
+            index = i + j*width;
+
+            for (t = 0; t < 4; t++)
+            {
+                count = 0;
+                for (l = 0; l < n; l++)
+                    for (k = 0; k < n; k++)
+                    {
+                        //aIndex = k + l*w;
+                        //TODO
+                        sIndex = ( index + (k - (cn-1) + (l- (cn-1))*width) )*4+t;
+                        if (sIndex > 0 && sIndex < height * width* 4 - 0)
+                        //if (i + k-n > 0 && i + k-n < width && j + l-n > 0 && j + l-n < height)
+                            tArr[count++] = stepPixels[sIndex];
+                        //sum += stepPixels[sIndex*4 + t] * arr[aIndex] * coef;
+                    }
+
+                sortArray(tArr, n);
+
+                pixels[index*4 + t] = tArr[cn];
+
+                //pixels[index*4 + t] = trunc(sum);
+            }
+        }
+
+    delete[] tArr;
+}
+
+void VadimImage::sortArray(unsigned char *a, int size)
+{
+    bool swapp = true;
+      while(swapp){
+        swapp = false;
+        for (int i = 0; i < size-1; i++) {
+            if (a[i]>a[i+1] ){
+                a[i] += a[i+1];
+                a[i+1] = a[i] - a[i+1];
+                a[i] -=a[i+1];
+                swapp = true;
+            }
+        }
+    }
 }
 
 void VadimImage::flipHorizontal()
@@ -722,20 +1035,20 @@ void VadimImage::rotate(int ang)
         int count = 0;
         double cos = qCos(angle);
         double sin = qSin(angle);
-        //qDebug() << "Cos" << cos << "Sin" << sin;
+        qDebug() << "Cos" << cos << "Sin" << sin;
         double det = width * sin;
 
         int px, py;
         double rx, ry;
 
-        QDebug dbg = qDebug();
+        //QDebug dbg = qDebug();
 
         for (py = 0; py < h; py++)
         {
             for (px = 0; px < w; px++)
             {
-                rx = px*cos - (py)*sin;
-                ry = px*sin + (py)*cos;
+                rx = (px)*cos - (py-det)*sin;
+                ry = (px)*sin + (py-det)*cos;
 
                 index = px + py * w;
                 oldIndex = rx + ry * width;
@@ -743,8 +1056,9 @@ void VadimImage::rotate(int ang)
                 index*=4;
                 oldIndex*=4;
 
-                dbg << index << ", ";
-                if (oldIndex >= 0 && oldIndex < width * height * 4)
+                //qDebug() << py << px << (px)*cos << (py-det)*sin << oldIndex/4;
+
+                if (rx >= 0 && rx < width && ry >= 0 && ry < height)//oldIndex >= 0 && oldIndex < width * height * 4)
                 {
                     //qDebug() << index/4 << oldIndex/4;
                     for (int k = 0; k < 4; k++)
@@ -764,6 +1078,69 @@ void VadimImage::rotate(int ang)
     }
 
 
+}
+
+void VadimImage::curveCorrection(double *arr, int size, ImageChannel ch)
+{
+    for (int i = 0; i < width * height * 4; i+=4)
+    {
+        pixels[i] = trunc(stepPixels[i] * arr[stepPixels[i]]);
+        pixels[i+1] = trunc(stepPixels[i+1] * arr[stepPixels[i+1]]);
+        pixels[i+2] = trunc(stepPixels[i+2] * arr[stepPixels[i+2]]);
+    }
+}
+
+void VadimImage::hsvCorrection(short int h, short int s, short int v)
+{
+    //copyRGBAtoHSV(stepPixels, hsvStepPixels);
+
+    double ah = h/100.0;
+    double as = s/100.0;
+    double av = v/100.0;
+
+    double nh, ns, nv;
+    for (int i = 0; i < width * height * 3; i+=3)
+    {
+        nh = hsvStepPixels[i] + ah;
+        if (nh > 360) nh -= 360; else if (nh < 0) nh = +360;
+        ns = hsvStepPixels[i+1] + as;
+        if (ns > 1) ns = 1; else if (ns < 0) ns = 0;
+        nv = hsvStepPixels[i+2] + av;
+        if (nv > 1) nv = 1; else if (nv < 0) nv = 0;
+
+        hsvPixels[i] = nh;
+        hsvPixels[i+1] = ns;
+        hsvPixels[i+2] = nv;
+    }
+
+    copyHSVtoRGBA(hsvPixels, pixels);
+}
+
+void VadimImage::blackWhitePoints(unsigned char a, unsigned char b)
+{
+    if (a > b)
+        qSwap(a,b);
+
+    double k = (255 - 0) / (double)(b - a);
+    double bb = (0 - k*a);
+
+    for (int i = 0; i < width * height * 4; i+=4)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            pixels[i+j] = trunc(stepPixels[i+j]*k + bb);
+
+            //if (pixels[i+j] < a)
+            //    pixels[i+j] = a;
+            //else
+            //    pixels[i+j] = stepPixels[i+j];
+            //
+            //if (pixels[i+j] > b)
+            //    pixels[i+j] = b;
+            //else
+            //    pixels[i+j] = stepPixels[i+j];
+        }
+    }
 }
 
 QImage VadimImage::getImage()

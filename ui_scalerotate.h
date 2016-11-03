@@ -80,13 +80,13 @@ public:
     QHBoxLayout *horizontalLayout_5;
     QSpacerItem *horizontalSpacer_2;
     QCheckBox *checkBox;
-    QSpacerItem *verticalSpacer;
+    QSpacerItem *verticalSpacer_2;
 
     void setupUi(QWidget *ScaleRotate)
     {
         if (ScaleRotate->objectName().isEmpty())
             ScaleRotate->setObjectName(QStringLiteral("ScaleRotate"));
-        ScaleRotate->resize(342, 375);
+        ScaleRotate->resize(342, 428);
         verticalLayout = new QVBoxLayout(ScaleRotate);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         horizontalLayout_3 = new QHBoxLayout();
@@ -352,9 +352,9 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_5);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout->addItem(verticalSpacer);
+        verticalLayout->addItem(verticalSpacer_2);
 
 
         retranslateUi(ScaleRotate);

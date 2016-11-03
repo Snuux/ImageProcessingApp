@@ -18,6 +18,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -50,12 +51,13 @@ public:
     QSlider *horizontalSlider_5;
     QSlider *horizontalSlider_6;
     QSlider *horizontalSlider_7;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *HistogramChange)
     {
         if (HistogramChange->objectName().isEmpty())
             HistogramChange->setObjectName(QStringLiteral("HistogramChange"));
-        HistogramChange->resize(277, 232);
+        HistogramChange->resize(277, 318);
         verticalLayout = new QVBoxLayout(HistogramChange);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         groupBox = new QGroupBox(HistogramChange);
@@ -214,6 +216,10 @@ public:
 
 
         verticalLayout->addWidget(groupBox_2);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
 
 
         retranslateUi(HistogramChange);
