@@ -2,7 +2,8 @@
 #define HSVCORRECTION_H
 
 #include <QWidget>
-#include "mainwindow.h"
+#include <cmath>
+#include "baseui.h"
 
 namespace Ui {
 class HSVCorrection;
@@ -29,10 +30,15 @@ private slots:
 
     void on_spinBox_3_editingFinished();
 
+    void on_horizontalSlider_valueChanged(int value);
+
+    void on_horizontalSlider_2_valueChanged(int value);
+
+    void on_horizontalSlider_3_valueChanged(int value);
+
 private:
     Ui::HSVCorrection *ui;
 
-    MainWindow *getWindow();
     void updateImage();
 };
 

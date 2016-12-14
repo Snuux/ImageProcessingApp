@@ -2,7 +2,7 @@
 #define CONVOLUTION_H
 
 #include <QWidget>
-#include "mainwindow.h"
+#include "baseui.h"
 
 #include <QString>
 #include <QStringList>
@@ -21,12 +21,15 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+    void on_plainTextEdit_textChanged();
+
+    void on_comboBox_activated(const QString &arg1);
 
 private:
     Ui::Convolution *ui;
 
-    MainWindow *getWindow();
     double *stringToChar(QString a, int &size);
+    QVector<double> stringToDoubleVector(QString a, int &size);
 };
 
 #endif // CONVOLUTION_H

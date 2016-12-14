@@ -6,7 +6,9 @@
 #include <QList>
 #include <QImage>
 #include <QPixmap>
-#include "mainwindow.h"
+
+#include <vector>
+#include "baseui.h"
 
 namespace Ui {
 class Palette;
@@ -26,7 +28,7 @@ private slots:
 private:
     Ui::Palette *ui;
     MainWindow *getWindow();
-    QImage createPaletteImage(QList<unsigned char> a);
+    QImage createPaletteImage(QVector<unsigned char> a);
 
     QGraphicsScene *scene;
     QGraphicsPixmapItem *item;

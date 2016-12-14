@@ -26,7 +26,7 @@
      <item row="0" column="1">
       <widget class="QSpinBox" name="spinBox">
        <property name="minimum">
-        <number>-300</number>
+        <number>0</number>
        </property>
        <property name="maximum">
         <number>300</number>
@@ -77,10 +77,10 @@
         </size>
        </property>
        <property name="minimum">
-        <number>-300</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>300</number>
+        <number>360</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

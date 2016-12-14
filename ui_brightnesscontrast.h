@@ -109,6 +109,7 @@ public:
 
         pushButton = new QPushButton(BrightnessContrast);
         pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setEnabled(false);
 
         horizontalLayout->addWidget(pushButton);
 

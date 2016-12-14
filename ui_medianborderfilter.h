@@ -37,6 +37,8 @@ public:
     QSpacerItem *horizontalSpacer;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout_2;
+    QLabel *label_2;
+    QSpinBox *spinBox_2;
     QPushButton *pushButton_2;
     QSpacerItem *horizontalSpacer_2;
     QSpacerItem *verticalSpacer;
@@ -79,6 +81,17 @@ public:
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         horizontalLayout_2 = new QHBoxLayout(groupBox_2);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        label_2 = new QLabel(groupBox_2);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        horizontalLayout_2->addWidget(label_2);
+
+        spinBox_2 = new QSpinBox(groupBox_2);
+        spinBox_2->setObjectName(QStringLiteral("spinBox_2"));
+        spinBox_2->setValue(3);
+
+        horizontalLayout_2->addWidget(spinBox_2);
+
         pushButton_2 = new QPushButton(groupBox_2);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
 
@@ -108,6 +121,7 @@ public:
         label->setText(QApplication::translate("MedianBorderFilter", "Matrix size:", 0));
         pushButton->setText(QApplication::translate("MedianBorderFilter", "Apply", 0));
         groupBox_2->setTitle(QApplication::translate("MedianBorderFilter", "Sharpen Filter", 0));
+        label_2->setText(QApplication::translate("MedianBorderFilter", "Matrix size:", 0));
         pushButton_2->setText(QApplication::translate("MedianBorderFilter", "Apply", 0));
     } // retranslateUi
 

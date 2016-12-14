@@ -2,7 +2,7 @@
 #define TOGREYSCALE_H
 
 #include <QWidget>
-#include <mainwindow.h>
+#include <baseui.h>
 
 namespace Ui {
 class ToGreyscale;
@@ -37,7 +37,6 @@ private slots:
 
 private:
     Ui::ToGreyscale *ui;
-    MainWindow *getWindow();
 };
 
 #endif // TOGREYSCALE_H

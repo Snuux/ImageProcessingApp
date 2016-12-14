@@ -46,13 +46,9 @@ void CurveCorrection::updateGammaPlot(double a, double gamma)
     ui->gamma_plot->yAxis->setRange(0, 1);
     ui->gamma_plot->replot();
 
-    double arr[256];
-    for (int i = 0; i < 256; i++)
-        arr[i] = y2[i];
-
-    getWindow()->getRawImage()->curveCorrection(arr, y2.length(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).curveCorrection(y2.toStdVector(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 void CurveCorrection::updateSPlot(double a, double gamma, unsigned char middlePoint)
 {
@@ -94,17 +90,17 @@ void CurveCorrection::updateSPlot(double a, double gamma, unsigned char middlePo
     for (int i = 0; i < 256; i++)
     {
         arr[i] = y1[i];
-        qDebug() << i <<  arr[i];
+        //qDebug() << i <<  arr[i];
     }
 
-    getWindow()->getRawImage()->curveCorrection(arr, y1.length(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).curveCorrection(y1.toStdVector(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
-void CurveCorrection::updateCustomPlot(double number)
+void CurveCorrection::updateCustomPlot(QVector<double>& x, QVector<double>& y)
 {
-    int n = 256; //x
+    /*int n = 256; //x
     int m = 256; //y
 
     QVector<double> x(n);
@@ -120,14 +116,9 @@ void CurveCorrection::updateCustomPlot(double number)
 
     }
 
-
-    double arr[256];
-    for (int i = 0; i < 256; i++)
-        arr[i] = y1[i];
-
-    getWindow()->getRawImage()->curveCorrection(arr, y1.length(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).curveCorrection(y1.toStdVector(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();*/
 }
 
 
@@ -141,14 +132,53 @@ void CurveCorrection::on_pushButton_clicked()
     updateGammaPlot(ui->doubleSpinBox->value(), ui->doubleSpinBox_2->value());
 }
 
-MainWindow *CurveCorrection::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
-}
-
 void CurveCorrection::on_pushButton_2_clicked()
 {
     updateSPlot(ui->doubleSpinBox_3->value(), ui->doubleSpinBox_4->value(), ui->spinBox->value());
+}
+
+void CurveCorrection::on_pushButton_3_clicked()
+{
+    //ui->plainTextEdit->document()->
+    //todo
+    int n = 256; //x
+    int m = 256; //y
+
+    QString a = ui->plainTextEdit->document()->toPlainText();
+
+    QStringList list = a.split(" ", QString::SkipEmptyParts);
+    QVector<double> xx, yy;
+
+
+    for (int i = 0; i < list.length() - 1; i+=2)
+    {
+        xx.push_back(list[i+0].toDouble() / (double)n);
+        yy.push_back(list[i+1].toDouble());
+        qDebug() << list[i+1].toDouble();
+    }
+
+    QVector<double> x(n);
+    for (int i = 0; i < n; i++) x[i] = i / (double)n;
+    QVector<double> y(m);
+    for (int i = 0; i < m; i++) y[i] = x[i];
+
+    //for (int i = 0; i < 20; i++)
+    //{
+    //    qDebug() << y[i] << yy[i];
+    //}
+
+    ui->custom_plot->graph(0)->setData(x, y);
+    ui->custom_plot->graph(1)->setData(xx, yy);
+    ui->custom_plot->graph(0)->setPen(QPen(QColor(255, 0, 0, 255)));
+    ui->custom_plot->graph(1)->setPen(QPen(QColor(0, 255, 0, 255)));
+
+    ui->custom_plot->xAxis->setRange(0, 1);
+    ui->custom_plot->yAxis->setRange(0, 1);
+    ui->custom_plot->replot();
+    //
+
+    BaseUI::getImage(this).curveCorrection(yy.toStdVector(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
+
 }

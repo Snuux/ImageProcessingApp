@@ -2,8 +2,7 @@
 #define BRIGHTNESSCONTRAST_H
 
 #include <QWidget>
-#include "mainwindow.h"
-#include "vadimimage.h"
+#include "baseui.h"
 
 namespace Ui {
 class BrightnessContrast;
@@ -23,8 +22,6 @@ private slots:
 
 private:
     Ui::BrightnessContrast *ui;
-
-    MainWindow *getWindow();
 };
 
 #endif // BRIGHTNESSCONTRAST_H

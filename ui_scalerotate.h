@@ -68,7 +68,7 @@ public:
     QPushButton *pushButton_11;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *pushButton_2;
-    QSpinBox *spinBox;
+    QDoubleSpinBox *doubleSpinBox_2;
     QSlider *horizontalSlider_2;
     QGroupBox *groupBox;
     QGridLayout *gridLayout;
@@ -150,6 +150,7 @@ public:
 
         groupBox_2 = new QGroupBox(ScaleRotate);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
+        groupBox_2->setEnabled(false);
         verticalLayout_3 = new QVBoxLayout(groupBox_2);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         horizontalLayout_6 = new QHBoxLayout();
@@ -162,6 +163,7 @@ public:
         spinBox_2->setObjectName(QStringLiteral("spinBox_2"));
         spinBox_2->setMinimum(1);
         spinBox_2->setMaximum(20000);
+        spinBox_2->setValue(1024);
 
         verticalLayout_4->addWidget(spinBox_2);
 
@@ -169,6 +171,7 @@ public:
         spinBox_3->setObjectName(QStringLiteral("spinBox_3"));
         spinBox_3->setMinimum(1);
         spinBox_3->setMaximum(20000);
+        spinBox_3->setValue(1024);
 
         verticalLayout_4->addWidget(spinBox_3);
 
@@ -284,18 +287,19 @@ public:
 
         horizontalLayout_2->addWidget(pushButton_2);
 
-        spinBox = new QSpinBox(ScaleRotate);
-        spinBox->setObjectName(QStringLiteral("spinBox"));
-        spinBox->setMinimum(-360);
-        spinBox->setMaximum(360);
+        doubleSpinBox_2 = new QDoubleSpinBox(ScaleRotate);
+        doubleSpinBox_2->setObjectName(QStringLiteral("doubleSpinBox_2"));
+        doubleSpinBox_2->setMinimum(-360);
+        doubleSpinBox_2->setMaximum(360);
+        doubleSpinBox_2->setSingleStep(0.1);
 
-        horizontalLayout_2->addWidget(spinBox);
+        horizontalLayout_2->addWidget(doubleSpinBox_2);
 
         horizontalSlider_2 = new QSlider(ScaleRotate);
         horizontalSlider_2->setObjectName(QStringLiteral("horizontalSlider_2"));
         horizontalSlider_2->setMaximumSize(QSize(16777215, 10));
-        horizontalSlider_2->setMinimum(-360);
-        horizontalSlider_2->setMaximum(360);
+        horizontalSlider_2->setMinimum(-3600);
+        horizontalSlider_2->setMaximum(3600);
         horizontalSlider_2->setValue(0);
         horizontalSlider_2->setOrientation(Qt::Horizontal);
 
@@ -382,7 +386,7 @@ public:
          << QApplication::translate("ScaleRotate", "x8", 0)
         );
         label->setText(QApplication::translate("ScaleRotate", "Left Top", 0));
-        label_2->setText(QApplication::translate("ScaleRotate", "Right top", 0));
+        label_2->setText(QApplication::translate("ScaleRotate", "Right Top", 0));
         label_4->setText(QApplication::translate("ScaleRotate", "Left Bot", 0));
         label_3->setText(QApplication::translate("ScaleRotate", "Right Bot", 0));
         pushButton_11->setText(QApplication::translate("ScaleRotate", "Crop", 0));

@@ -15,14 +15,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setMinimumWidth(20);
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::slotOpenFileDialog);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::slotSaveFileDialog);
+    connect(ui->actionUndo, &QAction::triggered, this, &MainWindow::slotUndo);
+    connect(ui->actionRedo, &QAction::triggered, this, &MainWindow::slotRedo);
     connect(ui->comboBox, &QComboBox::currentTextChanged, this, &MainWindow::slotChangeHistogramChannels);
 
     barAll = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
     barB = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
     barG = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
     barR = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-
-
 
     //ui->tab->setParent(ui->tabWidget);
     //ui->tab_2->setParent(ui->tabWidget);
@@ -35,58 +36,47 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->tabWidget->setParent(ui->verticalLayout);
     //ui->verticalLayout->setParent(ui->centralWidget);
     //ui->centralWidget->setParent(this);
-    /*QPainter painter(this);
-    painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 
-    QImage img;
-    img.load("Lena.png");
-    img = img.convertToFormat(QImage::Format_ARGB32);
+    ui->tabWidget->setCurrentIndex(1);
+    ui->tabWidget->removeTab(0);
 
-    int width = img.width();
-    int height = img.height();
+    //todo
+    loadImage();
 
-    QDebug dbg(QtDebugMsg);
-    for (int i = 0; i < 100; i++)
-        dbg << (int) img.bits()[i];
-    dbg << "\n";
-
-    unsigned char *bits = new unsigned char[width*height*4];
-    for (int i = 0; i < width*height*4; i++)
+    __int64 c1, c2, fr;
+    double t;
+    for (int i = 3; i < 31; i += 2)
     {
-        bits[i] = img.bits()[i];
+        QueryPerformanceCounter((LARGE_INTEGER *)&c1); //засекаем время запуска выполнения
+
+        image.filterBox(i, VImage::channelAll);
+
+        QueryPerformanceCounter((LARGE_INTEGER *)&c2); //засекаем время окончания выполнения
+        QueryPerformanceFrequency((LARGE_INTEGER *)&fr); //получаем частоту
+
+        t = (c2 - c1) / (float)fr;
+
+        qDebug() << t;
     }
 
-    for (int i = 0; i < 100; i++)
-        dbg << (int) bits[i];
-
-    int w1 = 800;
-    int h1 = 800;
-    float zw;
-    float zh;
-    unsigned char *zoomInBits;
-    zoomInBits = new unsigned char [w1*h1*4];
-
-    zoom(bits, zoomInBits, width, height, w1, h1, zw, zh);
-    //resample(bits, zoomInBits, width, height, w1, h1);
-    QImage imgDisp(zoomInBits, w1, h1, w1 * 4, QImage::Format_ARGB32);
-    //qDebug() << imgDisp.format();
-
-    //QImage imgDisp(bits, width, height, width * 4, QImage::Format_ARGB32);
-    //ui->imageLabel->setPixmap(QPixmap::fromImage(imgDisp));
-
-    QGraphicsScene* scene = new QGraphicsScene();
-    ui->graphicsView->setScene(scene);
-
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(imgDisp));
-    scene->addItem(item);
-
-    ui->imageLabel->setScaledContents(true);
-    ui->imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);*/
+    //for (int i = 3; i < 15; i += 2)
+    //{
+    //QDateTime start = QDateTime::currentDateTime();
+    //image.filterBox(i, VImage::channelAll);
+    //QDateTime finish = QDateTime::currentDateTime();
+    //
+    //int secs = finish.secsTo(start);
+    //start.addSecs(secs);
+    //int msecs = finish.time().msecsTo(start.time());
+    //
+    //int msecs_duration = secs * 1000 + msecs;
+    //
+    //qDebug() << msecs_duration;
+    //}
 
 
-    loadImage();
-    updateHistogram();
-    displayImage();
+    //updateHistogram();
+    //updateImage();
 }
 
 MainWindow::~MainWindow()
@@ -98,26 +88,46 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadImage()
 {
-    image.load("C:/Users/snuux/Documents/Qt Projects/build-ImageBrowser-Desktop_Qt_5_7_0_MinGW_32bit-Debug/LenaCut.png");
-    //image = image.convertToFormat(QImage::Format_RGB32);
-
-    rawImage = new VadimImage(image);
+    image = VImageLoader::loadImage("C:/Users/snuux/Documents/Qt Projects/build-ImageBrowser-Desktop_Qt_5_7_0_MinGW_32bit-Debug/LenaCut.png");
+    imageMem.setImage(image);
 }
 
-void MainWindow::displayImage()
+void MainWindow::loadImage(QString filepath)
 {
-    //item->clearFocus();
-    wait(400);
-    item->setPixmap(QPixmap::fromImage(rawImage->getImage()));
-    //updateHistogram();
-    //item->update();
-    //scene->update();
-    //ui->graphicsView->update();
+    image = VImageLoader::loadImage(filepath);
+    imageMem.setImage(image);
+}
+
+void MainWindow::updateImage()
+{
+    if (!ui->checkBox->isChecked() || (image.viewW != image.memW || image.viewH != image.memH))
+    {
+        QImage img(&image.viewPix[0], image.viewW, image.viewH, image.viewW * 4, QImage::Format_ARGB32);
+        item->setPixmap(QPixmap::fromImage(img));
+    }
+    else
+    {
+        long int index;
+        QVector<unsigned char> arr(QVector<unsigned char>::fromStdVector(image.viewPix));
+        for (int i = 0; i < image.memH*4; i+=4)
+            for (int j = 0; j < image.memW*4/2; j+=4)
+            {
+                index = j + i * image.memW;
+                arr[index+0] = image.memPix[index+0];
+                arr[index+1] = image.memPix[index+1];
+                arr[index+2] = image.memPix[index+2];
+                arr[index+3] = image.memPix[index+3];
+            }
+
+        QImage img(arr.data(), image.viewW, image.viewH, image.viewW * 4, QImage::Format_ARGB32);
+        item->setPixmap(QPixmap::fromImage(img));
+    }
 }
 
 void MainWindow::updateHistogram()
 {
-    getRawImage()->doHistogram();
+    VImage::computeHistogram(image.viewPix);
+    //getRawImage()->doHistogram();
 
     QVector<double> x(256);
     for (int i = 0; i < 256; i++)
@@ -125,19 +135,17 @@ void MainWindow::updateHistogram()
 
     QVector<double> y(256);
     for (int i = 0; i < 256; i++)
-        y[i] = rawImage->getHistogramBlue()[i];
+        y[i] = VImage::histB[i];
     QVector<double> y1(256);
     for (int i = 0; i < 256; i++)
-        y1[i] = rawImage->getHistogramGreen()[i];
+        y1[i] = VImage::histG[i];
     QVector<double> y2(256);
     for (int i = 0; i < 256; i++)
-        y2[i] = rawImage->getHistogramRed()[i];
+        y2[i] = VImage::histR[i];
 
     QVector<double> y3(256); //grey
     for (int i = 0; i < 256; i++)
-        y3[i] = rawImage->getHistogramRed()[i]+
-                rawImage->getHistogramGreen()[i]+
-                rawImage->getHistogramBlue()[i];
+        y3[i] = y[i]+y1[i]+y2[i];
 
     barB->setData(x, y);
     barB->setPen(QPen(QColor(0, 0, 255, 25)));
@@ -174,18 +182,21 @@ void MainWindow::wait(int millisecondsToWait)
     }
 }
 
-VadimImage *MainWindow::getRawImage() const
-{
-    return rawImage;
-}
-
 void MainWindow::slotOpenFileDialog()
 {
     fileName = QFileDialog::getOpenFileName(this,
-        tr("Open Image"), "", tr("Image Files (*.png *.jpg *.bmp)"));
+        tr("Open Image"), "", tr("Image Files (*.png *.jpg *.bmp *.tiff)"));
 
-    loadImage();
-    displayImage();
+    loadImage(fileName);
+    updateHistogram();
+    updateImage();
+}
+
+void MainWindow::slotSaveFileDialog()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save Image"), "", tr("Image Files (*.png *.jpg *.bmp *.tiff)"));
+    VImageLoader::saveImage(image, fileName);
 }
 
 void MainWindow::slotChangeHistogramChannels(QString str)
@@ -222,15 +233,58 @@ void MainWindow::slotChangeHistogramChannels(QString str)
     ui->customPlot->replot();
 }
 
-void MainWindow::on_groupBox_toggled(bool arg1)
+void MainWindow::slotUndo()
 {
-    //if (arg1 == true)
-    //    ui->groupBox->adjustSize();
-    //else
-    //    ui->groupBox->resize(ui->groupBox->width(), 15);
+    imageMem.undo(image);
+    updateImage();
+    updateHistogram();
+    qDebug() << "slotUndo";
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::slotRedo()
 {
-    displayImage();
+    imageMem.redo(image);
+    updateImage();
+    updateHistogram();
+    qDebug() << "slotRedo";
+}
+
+void MainWindow::on_applyButton_clicked()
+{
+    imageMem.apply(image);
+    qDebug() << "on_applyButton_clicked";
+}
+
+void MainWindow::on_revertButton_clicked()
+{
+    image.memToView();
+    updateImage();
+    updateHistogram();
+}
+
+void MainWindow::on_undoButton_clicked()
+{
+    imageMem.undo(image);
+    updateImage();
+    updateHistogram();
+    qDebug() << "on_undoButton_clicked";
+}
+
+void MainWindow::on_redoButton_clicked()
+{
+    imageMem.redo(image);
+    updateImage();
+    updateHistogram();
+    qDebug() << "on_redoButton_clicked";
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(const QString &s)
+{
+    BaseUI::setCurCh(s);
+    qDebug() << s;
+}
+
+void MainWindow::on_checkBox_stateChanged(int arg1)
+{
+    qDebug() << "aa";
 }

@@ -2,7 +2,7 @@
 #define BINARIZATION_H
 
 #include <QWidget>
-#include "mainwindow.h"
+#include "baseui.h"
 
 namespace Ui {
 class Binarization;
@@ -23,8 +23,6 @@ private slots:
 
 private:
     Ui::Binarization *ui;
-
-    MainWindow *getWindow();
 };
 
 #endif // BINARIZATION_H

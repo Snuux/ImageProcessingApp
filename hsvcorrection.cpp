@@ -13,18 +13,11 @@ HSVCorrection::~HSVCorrection()
     delete ui;
 }
 
-MainWindow *HSVCorrection::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
-}
-
 void HSVCorrection::updateImage()
 {
-    getWindow()->getRawImage()->hsvCorrection(ui->spinBox->value(), ui->spinBox_2->value(), ui->spinBox_3->value());
-    getWindow()->updateHistogram();
-    getWindow()->displayImage();
+    BaseUI::getImage(this).hsvCorrection(ui->spinBox->value(), ui->spinBox_2->value(), ui->spinBox_3->value());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 void HSVCorrection::on_horizontalSlider_sliderReleased()
 {
@@ -60,4 +53,19 @@ void HSVCorrection::on_spinBox_3_editingFinished()
 {
     ui->horizontalSlider_3->setValue(ui->spinBox_3->value());
     updateImage();
+}
+
+void HSVCorrection::on_horizontalSlider_valueChanged(int value)
+{
+    ui->spinBox->setValue(value);
+}
+
+void HSVCorrection::on_horizontalSlider_2_valueChanged(int value)
+{
+    ui->spinBox_2->setValue(value);
+}
+
+void HSVCorrection::on_horizontalSlider_3_valueChanged(int value)
+{
+    ui->spinBox_3->setValue(value);
 }

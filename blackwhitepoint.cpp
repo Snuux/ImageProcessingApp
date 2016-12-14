@@ -44,17 +44,12 @@ void BlackWhitePoint::updatePlot(unsigned char a, unsigned char b)
     for (int i = 0; i < 256; i++)
         arr[i] = ya[i];
 
-    getWindow()->getRawImage()->blackWhitePoints(a, 255 - b);
+    //getWindow()->getRawImage()->blackWhitePoints(a, 255 - b);
     //getWindow()->getRawImage()->curveCorrection(arr, ya.length(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
-}
 
-MainWindow *BlackWhitePoint::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
+    BaseUI::getImage(this).setBlackWhitePoints(a, 255 - b);
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void BlackWhitePoint::on_spinBox_editingFinished()

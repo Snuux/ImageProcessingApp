@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QHBoxLayout>
@@ -21,13 +22,16 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "addcolor.h"
 #include "binarization.h"
 #include "blackwhitepoint.h"
+#include "boxgauss.h"
 #include "brightnesscontrast.h"
 #include "convolution.h"
 #include "curvecorrection.h"
@@ -92,13 +96,23 @@ public:
     QVBoxLayout *verticalLayout_13;
     MedianBorderFilter *widget_11;
     QWidget *tab_12;
+    QVBoxLayout *verticalLayout_16;
+    AddColor *widget_13;
     QWidget *tab_13;
+    QVBoxLayout *verticalLayout_3;
+    BoxGauss *widget_12;
     QComboBox *comboBox;
     QHBoxLayout *horizontalLayout_2;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *applyButton;
+    QPushButton *revertButton;
     QVBoxLayout *verticalLayout_15;
     QGraphicsView *graphicsView;
+    QHBoxLayout *horizontalLayout_3;
+    QVBoxLayout *verticalLayout_17;
+    QSpacerItem *verticalSpacer;
+    QCheckBox *checkBox;
+    QPushButton *undoButton;
+    QPushButton *redoButton;
     QCustomPlot *customPlot;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -117,6 +131,8 @@ public:
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(1000, 414);
         MainWindow->setMinimumSize(QSize(1000, 0));
+        MainWindow->setIconSize(QSize(1, 1));
+        MainWindow->setToolButtonStyle(Qt::ToolButtonIconOnly);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
         actionSave = new QAction(MainWindow);
@@ -300,9 +316,27 @@ public:
         tabWidget->addTab(tab_11, QString());
         tab_12 = new QWidget();
         tab_12->setObjectName(QStringLiteral("tab_12"));
+        verticalLayout_16 = new QVBoxLayout(tab_12);
+        verticalLayout_16->setSpacing(6);
+        verticalLayout_16->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_16->setObjectName(QStringLiteral("verticalLayout_16"));
+        widget_13 = new AddColor(tab_12);
+        widget_13->setObjectName(QStringLiteral("widget_13"));
+
+        verticalLayout_16->addWidget(widget_13);
+
         tabWidget->addTab(tab_12, QString());
         tab_13 = new QWidget();
         tab_13->setObjectName(QStringLiteral("tab_13"));
+        verticalLayout_3 = new QVBoxLayout(tab_13);
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        widget_12 = new BoxGauss(tab_13);
+        widget_12->setObjectName(QStringLiteral("widget_12"));
+
+        verticalLayout_3->addWidget(widget_12);
+
         tabWidget->addTab(tab_13, QString());
 
         verticalLayout_14->addWidget(tabWidget);
@@ -315,16 +349,16 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        applyButton = new QPushButton(centralWidget);
+        applyButton->setObjectName(QStringLiteral("applyButton"));
 
-        horizontalLayout_2->addWidget(pushButton);
+        horizontalLayout_2->addWidget(applyButton);
 
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setMaximumSize(QSize(80, 16777215));
+        revertButton = new QPushButton(centralWidget);
+        revertButton->setObjectName(QStringLiteral("revertButton"));
+        revertButton->setMaximumSize(QSize(80, 16777215));
 
-        horizontalLayout_2->addWidget(pushButton_2);
+        horizontalLayout_2->addWidget(revertButton);
 
 
         verticalLayout_14->addLayout(horizontalLayout_2);
@@ -342,14 +376,45 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(graphicsView->sizePolicy().hasHeightForWidth());
         graphicsView->setSizePolicy(sizePolicy2);
+        graphicsView->viewport()->setProperty("cursor", QVariant(QCursor(Qt::CrossCursor)));
         graphicsView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
         graphicsView->setResizeAnchor(QGraphicsView::NoAnchor);
 
         verticalLayout_15->addWidget(graphicsView);
 
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        verticalLayout_17 = new QVBoxLayout();
+        verticalLayout_17->setSpacing(6);
+        verticalLayout_17->setObjectName(QStringLiteral("verticalLayout_17"));
+        verticalSpacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        verticalLayout_17->addItem(verticalSpacer);
+
+        checkBox = new QCheckBox(centralWidget);
+        checkBox->setObjectName(QStringLiteral("checkBox"));
+
+        verticalLayout_17->addWidget(checkBox);
+
+        undoButton = new QPushButton(centralWidget);
+        undoButton->setObjectName(QStringLiteral("undoButton"));
+        undoButton->setEnabled(true);
+
+        verticalLayout_17->addWidget(undoButton);
+
+        redoButton = new QPushButton(centralWidget);
+        redoButton->setObjectName(QStringLiteral("redoButton"));
+        redoButton->setEnabled(true);
+
+        verticalLayout_17->addWidget(redoButton);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_17);
+
         customPlot = new QCustomPlot(centralWidget);
         customPlot->setObjectName(QStringLiteral("customPlot"));
-        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Minimum);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
@@ -357,7 +422,10 @@ public:
         customPlot->setMinimumSize(QSize(300, 100));
         customPlot->setBaseSize(QSize(0, 200));
 
-        verticalLayout_15->addWidget(customPlot);
+        horizontalLayout_3->addWidget(customPlot);
+
+
+        verticalLayout_15->addLayout(horizontalLayout_3);
 
 
         horizontalLayout->addLayout(verticalLayout_15);
@@ -412,7 +480,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(10);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -450,8 +518,11 @@ public:
          << QApplication::translate("MainWindow", "Green Channel", 0)
          << QApplication::translate("MainWindow", "Blue Channel", 0)
         );
-        pushButton->setText(QApplication::translate("MainWindow", "Apply", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Revert", 0));
+        applyButton->setText(QApplication::translate("MainWindow", "Apply", 0));
+        revertButton->setText(QApplication::translate("MainWindow", "Revert", 0));
+        checkBox->setText(QApplication::translate("MainWindow", "Full/Half View", 0));
+        undoButton->setText(QApplication::translate("MainWindow", "Undo", 0));
+        redoButton->setText(QApplication::translate("MainWindow", "Redo", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0));
         menuFilter->setTitle(QApplication::translate("MainWindow", "Filter", 0));

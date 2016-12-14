@@ -56,7 +56,7 @@ public:
 
         spinBox = new QSpinBox(HSVCorrection);
         spinBox->setObjectName(QStringLiteral("spinBox"));
-        spinBox->setMinimum(-300);
+        spinBox->setMinimum(0);
         spinBox->setMaximum(300);
 
         gridLayout->addWidget(spinBox, 0, 1, 1, 1);
@@ -81,8 +81,8 @@ public:
         horizontalSlider = new QSlider(HSVCorrection);
         horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
         horizontalSlider->setMaximumSize(QSize(16777215, 10));
-        horizontalSlider->setMinimum(-300);
-        horizontalSlider->setMaximum(300);
+        horizontalSlider->setMinimum(0);
+        horizontalSlider->setMaximum(360);
         horizontalSlider->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(horizontalSlider, 0, 2, 1, 1);

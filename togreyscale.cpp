@@ -15,56 +15,56 @@ ToGreyscale::~ToGreyscale()
 
 void ToGreyscale::on_pushButton_clicked()
 {
-    getWindow()->getRawImage()->convertToGrey(1, 0, VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).convertToGrey(1, 0, BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_pushButton_2_clicked()
 {
-    getWindow()->getRawImage()->convertToGrey(2, 0, VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).convertToGrey(2, 0, BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_pushButton_3_clicked()
 {
-    getWindow()->getRawImage()->convertToGrey(3, 0, VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).convertToGrey(3, 0, BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_pushButton_4_clicked()
 {
-    getWindow()->getRawImage()->convertToGrey(4, 0, VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).convertToGrey(4, 0, BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_pushButton_5_clicked()
 {
-    getWindow()->getRawImage()->convertToGrey(5, 0, VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).convertToGrey(5, 0, BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_pushButton_6_clicked()
 {
     if (ui->comboBox->currentText() == "Red Channel")
-        getWindow()->getRawImage()->convertToGrey(6, 0, VadimImage::red);
+        BaseUI::getImage(this).convertToGrey(6, 0, VImage::channelRed);
     else if (ui->comboBox->currentText() == "Green Channel")
-        getWindow()->getRawImage()->convertToGrey(6, 0, VadimImage::green);
+        BaseUI::getImage(this).convertToGrey(6, 0, VImage::channelGreen);
     else if (ui->comboBox->currentText() == "Blue Channel")
-        getWindow()->getRawImage()->convertToGrey(6, 0, VadimImage::blue);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+        BaseUI::getImage(this).convertToGrey(6, 0, VImage::channelBlue);
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_pushButton_7_clicked()
 {
-    getWindow()->getRawImage()->convertToGrey(7, ui->spinBox->value(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).convertToGrey(7, ui->spinBox->value(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ToGreyscale::on_spinBox_valueChanged(int arg1)
@@ -75,11 +75,4 @@ void ToGreyscale::on_spinBox_valueChanged(int arg1)
 void ToGreyscale::on_horizontalSlider_sliderMoved(int position)
 {
     ui->spinBox->setValue(position);
-}
-
-MainWindow *ToGreyscale::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
 }

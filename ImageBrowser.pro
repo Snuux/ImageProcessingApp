@@ -14,7 +14,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    vadimimage.cpp \
     libs/qcustomplot.cpp \
     histogramchange.cpp \
     brightnesscontrast.cpp \
@@ -26,10 +25,15 @@ SOURCES += main.cpp\
     curvecorrection.cpp \
     hsvcorrection.cpp \
     blackwhitepoint.cpp \
-    medianborderfilter.cpp
+    medianborderfilter.cpp \
+    vimage.cpp \
+    vimageloader.cpp \
+    vimagemem.cpp \
+    boxgauss.cpp \
+    addcolor.cpp \
+    baseui.cpp
 
 HEADERS  += mainwindow.h \
-    vadimimage.h \
     libs/qcustomplot.h \
     histogramchange.h \
     brightnesscontrast.h \
@@ -41,7 +45,13 @@ HEADERS  += mainwindow.h \
     curvecorrection.h \
     hsvcorrection.h \
     blackwhitepoint.h \
-    medianborderfilter.h
+    medianborderfilter.h \
+    vimage.h \
+    vimageloader.h \
+    vimagemem.h \
+    baseui.h \
+    boxgauss.h \
+    addcolor.h
 
 FORMS    += mainwindow.ui \
     histogramchange.ui \
@@ -54,7 +64,9 @@ FORMS    += mainwindow.ui \
     curvecorrection.ui \
     hsvcorrection.ui \
     blackwhitepoint.ui \
-    medianborderfilter.ui
+    medianborderfilter.ui \
+    boxgauss.ui \
+    addcolor.ui
 
 DISTFILES += \
     libs/qxtnamespace.qdoc

@@ -2,7 +2,7 @@
 #define BLACKWHITEPOINT_H
 
 #include <QWidget>
-#include "mainwindow.h"
+#include "baseui.h"
 
 namespace Ui {
 class BlackWhitePoint;
@@ -18,19 +18,15 @@ public:
 
 private slots:
     void on_spinBox_editingFinished();
-
     void on_spinBox_2_editingFinished();
 
     void on_horizontalSlider_sliderReleased();
-
     void on_horizontalSlider_2_sliderReleased();
 
 private:
     Ui::BlackWhitePoint *ui;
 
     void updatePlot(unsigned char a, unsigned char b);
-
-    MainWindow *getWindow();
 };
 
 #endif // BLACKWHITEPOINT_H

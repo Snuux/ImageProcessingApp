@@ -6,9 +6,6 @@ ScaleRotate::ScaleRotate(QWidget *parent) :
     ui(new Ui::ScaleRotate)
 {
     ui->setupUi(this);
-
-    //ui->spinBox_2->setValue(getWindow()->getRawImage()->getHeight());
-    //ui->spinBox_2->setValue(getWindow()->getRawImage()->getWidth());
 }
 
 ScaleRotate::~ScaleRotate()
@@ -18,16 +15,9 @@ ScaleRotate::~ScaleRotate()
 
 void ScaleRotate::on_pushButton_10_clicked()
 {
-    getWindow()->getRawImage()->zoomBilinear(ui->spinBox_2->value(), ui->spinBox_3->value());
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
-}
-
-MainWindow *ScaleRotate::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
+    BaseUI::getImage(this).zoomBilinear(ui->spinBox_2->value(), ui->spinBox_3->value());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ScaleRotate::on_doubleSpinBox_editingFinished()
@@ -36,17 +26,17 @@ void ScaleRotate::on_doubleSpinBox_editingFinished()
 
     if (ui->checkBox->isChecked())
     {
-        getWindow()->getRawImage()->zoomBilinear(ui->doubleSpinBox->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).zoomBilinear(ui->doubleSpinBox->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
 }
 
 void ScaleRotate::on_pushButton_clicked()
 {
-    getWindow()->getRawImage()->zoomBilinear(ui->doubleSpinBox->value());
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).zoomBilinear(ui->doubleSpinBox->value());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ScaleRotate::on_horizontalSlider_3_sliderReleased()
@@ -55,9 +45,9 @@ void ScaleRotate::on_horizontalSlider_3_sliderReleased()
     {
         ui->doubleSpinBox_3->setValue(ui->horizontalSlider_3->value() / 100.0);
 
-        getWindow()->getRawImage()->zoomNeighbor(ui->doubleSpinBox_3->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).zoomNeighbor(ui->doubleSpinBox_3->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
 }
 
@@ -67,9 +57,9 @@ void ScaleRotate::on_horizontalSlider_sliderReleased()
     {
         ui->doubleSpinBox->setValue(ui->horizontalSlider->value() / 100.0);
 
-        getWindow()->getRawImage()->zoomBilinear(ui->doubleSpinBox->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).zoomBilinear(ui->doubleSpinBox->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
 }
 
@@ -79,9 +69,9 @@ void ScaleRotate::on_horizontalSlider_3_sliderMoved(int position)
 
     if (ui->checkBox->isChecked())
     {
-        getWindow()->getRawImage()->zoomNeighbor(ui->doubleSpinBox_3->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).zoomNeighbor(ui->doubleSpinBox_3->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
 }
 
@@ -91,81 +81,75 @@ void ScaleRotate::on_horizontalSlider_sliderMoved(int position)
 
     if (ui->checkBox->isChecked())
     {
-        getWindow()->getRawImage()->zoomBilinear(ui->doubleSpinBox->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).zoomBilinear(ui->doubleSpinBox->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
 }
 
 void ScaleRotate::on_pushButton_8_clicked()
 {
-    getWindow()->getRawImage()->flipHorizontal();
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).flipHorizontal();
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ScaleRotate::on_pushButton_9_clicked()
 {
-    getWindow()->getRawImage()->flipVertical();
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).flipVertical();
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ScaleRotate::on_pushButton_6_clicked()
 {
-    getWindow()->getRawImage()->rotate90clockwise();
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).rotate90clockwise();
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ScaleRotate::on_pushButton_7_clicked()
 {
-    getWindow()->getRawImage()->rotate90counterClockwise();
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).rotate90counterClockwise();
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void ScaleRotate::on_pushButton_4_clicked()
 {
-    getWindow()->getRawImage()->rotate180();
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).rotate180();
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
-void ScaleRotate::on_horizontalSlider_2_sliderReleased()
+void ScaleRotate::on_horizontalSlider_2_sliderReleased() // rotate
 {
     if (!ui->checkBox->isChecked())
     {
-        ui->doubleSpinBox->setValue(ui->horizontalSlider->value() / 100.0);
+        ui->doubleSpinBox_2->setValue(ui->horizontalSlider_2->value() / 10.0);
+        qDebug() << ui->horizontalSlider_2->value() << ui->horizontalSlider_2->value() / 10.0;
 
-        getWindow()->getRawImage()->rotate(ui->spinBox->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).rotate(ui->doubleSpinBox_2->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
 }
 
-void ScaleRotate::on_horizontalSlider_2_sliderMoved(int position)
+void ScaleRotate::on_horizontalSlider_2_sliderMoved(int position) // rotate
 {
-    ui->spinBox->setValue(position);
+    ui->doubleSpinBox_2->setValue(position/10.0);
 
     if (ui->checkBox->isChecked())
     {
-        getWindow()->getRawImage()->rotate(ui->spinBox->value());
-        getWindow()->displayImage();
-        getWindow()->updateHistogram();
+        BaseUI::getImage(this).rotate(ui->doubleSpinBox_2->value());
+        BaseUI::getWindow(this)->updateImage();
+        BaseUI::getWindow(this)->updateHistogram();
     }
-}
-
-void ScaleRotate::on_spinBox_editingFinished()
-{
-    getWindow()->getRawImage()->rotate(ui->spinBox->value());
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
 }
 
 void ScaleRotate::on_pushButton_2_clicked()
 {
-    getWindow()->getRawImage()->rotate(ui->spinBox->value());
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).rotate(ui->doubleSpinBox_2->value());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }

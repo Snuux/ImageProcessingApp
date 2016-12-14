@@ -26,10 +26,13 @@ Palette::~Palette()
 
 void Palette::on_pushButton_clicked()
 {
-    QList<unsigned char> p = getWindow()->getRawImage()->getPalette(ui->spinBox->value(), VadimImage::all);
+    QVector<unsigned char> p;
+    std::vector<unsigned char> ret = BaseUI::getImage(this).getPalette(ui->spinBox->value());
+    p = QVector<unsigned char>::fromStdVector(ret);
+    //= getWindow()->getRawImage()->getPalette(ui->spinBox->value(), VadimImage::all);
     ui->lineEdit->clear();
 
-    for (int i = 0; i < p.length(); i+=3)
+    for (int i = 0; i < p.size(); i+=3)
     {
         ui->lineEdit->setText(ui->lineEdit->text() + "{");
         ui->lineEdit->setText(ui->lineEdit->text() + QString::number(p[i+2]) + ",");
@@ -41,9 +44,9 @@ void Palette::on_pushButton_clicked()
     item->setPixmap(QPixmap::fromImage( createPaletteImage(p) ));
 }
 
-QImage Palette::createPaletteImage(QList<unsigned char> a)
+QImage Palette::createPaletteImage(QVector<unsigned char> a)
 {
-    int size = a.length();
+    int size = a.size();
     int width = 15;
     int height = size/width + 1;
 
@@ -68,11 +71,4 @@ QImage Palette::createPaletteImage(QList<unsigned char> a)
     }
 
     return *paletteImage;
-}
-
-MainWindow *Palette::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
 }

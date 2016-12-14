@@ -49,12 +49,119 @@
          </item>
          <item>
           <widget class="QCheckBox" name="checkBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Auto</string>
            </property>
            <property name="checked">
             <bool>true</bool>
            </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Preset:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>Simple 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Right Simple 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Left Simple 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Up Simple 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Down Simple 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Negative</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Box 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Box 3x3 Norm</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Box 5x5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Box 5x5 Norm</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Gauss 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Gauss 3x3 Norm</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Gauss 5x5</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Gauss 5x5 Norm</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Sharpen 3x3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Sharpen 5x5</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
@@ -81,6 +188,19 @@
            </property>
           </widget>
          </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </item>
       </layout>
@@ -89,6 +209,9 @@
       <widget class="QCheckBox" name="checkBox_2">
        <property name="text">
         <string>Normalize</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

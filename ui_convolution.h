@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -38,9 +39,13 @@ public:
     QSpinBox *spinBox;
     QSpinBox *spinBox_2;
     QCheckBox *checkBox;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_4;
+    QComboBox *comboBox;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_2;
     QDoubleSpinBox *doubleSpinBox;
+    QSpacerItem *horizontalSpacer_2;
     QCheckBox *checkBox_2;
     QPushButton *pushButton;
     QSpacerItem *horizontalSpacer;
@@ -81,12 +86,33 @@ public:
 
         checkBox = new QCheckBox(Convolution);
         checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setEnabled(false);
         checkBox->setChecked(true);
 
         horizontalLayout->addWidget(checkBox);
 
 
         verticalLayout_2->addLayout(horizontalLayout);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        label_4 = new QLabel(Convolution);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        horizontalLayout_4->addWidget(label_4);
+
+        comboBox = new QComboBox(Convolution);
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(comboBox->sizePolicy().hasHeightForWidth());
+        comboBox->setSizePolicy(sizePolicy);
+
+        horizontalLayout_4->addWidget(comboBox);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_4);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -103,6 +129,10 @@ public:
 
         horizontalLayout_2->addWidget(doubleSpinBox);
 
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_2);
+
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
@@ -111,6 +141,7 @@ public:
 
         checkBox_2 = new QCheckBox(Convolution);
         checkBox_2->setObjectName(QStringLiteral("checkBox_2"));
+        checkBox_2->setChecked(true);
 
         horizontalLayout_3->addWidget(checkBox_2);
 
@@ -138,6 +169,9 @@ public:
 
         retranslateUi(Convolution);
 
+        comboBox->setCurrentIndex(0);
+
+
         QMetaObject::connectSlotsByName(Convolution);
     } // setupUi
 
@@ -146,6 +180,26 @@ public:
         Convolution->setWindowTitle(QApplication::translate("Convolution", "Form", 0));
         label->setText(QApplication::translate("Convolution", "Matrix Size:", 0));
         checkBox->setText(QApplication::translate("Convolution", "Auto", 0));
+        label_4->setText(QApplication::translate("Convolution", "Preset:", 0));
+        comboBox->clear();
+        comboBox->insertItems(0, QStringList()
+         << QApplication::translate("Convolution", "Simple 3x3", 0)
+         << QApplication::translate("Convolution", "Right Simple 3x3", 0)
+         << QApplication::translate("Convolution", "Left Simple 3x3", 0)
+         << QApplication::translate("Convolution", "Up Simple 3x3", 0)
+         << QApplication::translate("Convolution", "Down Simple 3x3", 0)
+         << QApplication::translate("Convolution", "Negative", 0)
+         << QApplication::translate("Convolution", "Box 3x3", 0)
+         << QApplication::translate("Convolution", "Box 3x3 Norm", 0)
+         << QApplication::translate("Convolution", "Box 5x5", 0)
+         << QApplication::translate("Convolution", "Box 5x5 Norm", 0)
+         << QApplication::translate("Convolution", "Gauss 3x3", 0)
+         << QApplication::translate("Convolution", "Gauss 3x3 Norm", 0)
+         << QApplication::translate("Convolution", "Gauss 5x5", 0)
+         << QApplication::translate("Convolution", "Gauss 5x5 Norm", 0)
+         << QApplication::translate("Convolution", "Sharpen 3x3", 0)
+         << QApplication::translate("Convolution", "Sharpen 5x5", 0)
+        );
         label_2->setText(QApplication::translate("Convolution", "Divider:", 0));
         checkBox_2->setText(QApplication::translate("Convolution", "Normalize", 0));
         pushButton->setText(QApplication::translate("Convolution", "Ok", 0));

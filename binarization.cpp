@@ -16,19 +16,11 @@ Binarization::~Binarization()
 void Binarization::on_horizontalSlider_sliderMoved(int position)
 {
     ui->spinBox->setValue(position);
-    //getWindow()->getRawImage()->addBrightness(position, VadimImage::all);
 }
 
 void Binarization::on_pushButton_clicked()
 {
-    getWindow()->getRawImage()->binirizeSimple(ui->spinBox->value(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
-}
-
-MainWindow *Binarization::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
+    BaseUI::getImage(this).binirizeSimple(ui->spinBox->value(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }

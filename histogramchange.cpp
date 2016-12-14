@@ -37,18 +37,11 @@ void HistogramChange::on_horizontalSlider_4_sliderReleased()
     editAndUpdateHistogram4();
 }
 
-MainWindow *HistogramChange::getWindow()
-{
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
-}
-
 void HistogramChange::editAndUpdateHistogram4()
 {
-    getWindow()->getRawImage()->editHistogram4(ui->spinBox->value(), ui->spinBox_4->value(), ui->spinBox_2->value(), ui->spinBox_3->value(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).editHistogram4(ui->spinBox->value(), ui->spinBox_4->value(), ui->spinBox_2->value(), ui->spinBox_3->value(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
 void HistogramChange::on_horizontalSlider_5_sliderReleased()
@@ -71,7 +64,7 @@ void HistogramChange::on_horizontalSlider_7_sliderReleased()
 
 void HistogramChange::editAndUpdateHistogram3()
 {
-    getWindow()->getRawImage()->editHistogram3(ui->spinBox_5->value(), ui->spinBox_6->value(), ui->doubleSpinBox->value(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).editHistogram3(ui->spinBox_5->value(), ui->spinBox_6->value(), ui->doubleSpinBox->value(), VImage::channelAll);
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }

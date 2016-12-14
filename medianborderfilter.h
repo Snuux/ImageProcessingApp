@@ -2,7 +2,7 @@
 #define MEDIANBORDERFILTER_H
 
 #include <QWidget>
-#include "mainwindow.h"
+#include "baseui.h"
 
 namespace Ui {
 class MedianBorderFilter;
@@ -19,10 +19,10 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MedianBorderFilter *ui;
-
-    MainWindow* getWindow();
 };
 
 #endif // MEDIANBORDERFILTER_H

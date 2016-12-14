@@ -57,7 +57,7 @@ public:
     {
         if (HistogramChange->objectName().isEmpty())
             HistogramChange->setObjectName(QStringLiteral("HistogramChange"));
-        HistogramChange->resize(277, 318);
+        HistogramChange->resize(295, 295);
         verticalLayout = new QVBoxLayout(HistogramChange);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         groupBox = new QGroupBox(HistogramChange);

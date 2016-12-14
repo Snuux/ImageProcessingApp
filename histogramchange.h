@@ -2,7 +2,7 @@
 #define HISTOGRAMCHANGE_H
 
 #include <QWidget>
-#include "mainwindow.h"
+#include "baseui.h"
 
 namespace Ui {
 class HistogramChange;
@@ -21,8 +21,6 @@ private slots:
     void on_horizontalSlider_2_sliderReleased();
     void on_horizontalSlider_3_sliderReleased();
     void on_horizontalSlider_4_sliderReleased();
-
-    MainWindow *getWindow();
 
     void editAndUpdateHistogram4();
     void editAndUpdateHistogram3();

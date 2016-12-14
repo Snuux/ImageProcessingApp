@@ -15,14 +15,14 @@ MedianBorderFilter::~MedianBorderFilter()
 
 void MedianBorderFilter::on_pushButton_clicked()
 {
-    getWindow()->getRawImage()->medianFilter(ui->spinBox->value(), VadimImage::all);
-    getWindow()->displayImage();
-    getWindow()->updateHistogram();
+    BaseUI::getImage(this).filterMedian(ui->spinBox->value(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }
 
-MainWindow *MedianBorderFilter::getWindow()
+void MedianBorderFilter::on_pushButton_2_clicked()
 {
-    QWidget* widget = this;
-    while (widget -> parentWidget() != Q_NULLPTR) widget = widget -> parentWidget() ;
-    return qobject_cast<MainWindow *>(widget);
+    BaseUI::getImage(this).filterSharpen(ui->spinBox_2->value(), BaseUI::getCurCh());
+    BaseUI::getWindow(this)->updateImage();
+    BaseUI::getWindow(this)->updateHistogram();
 }

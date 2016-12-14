@@ -2,8 +2,11 @@
 #define CURVECORRECTION_H
 
 #include <QWidget>
-#include "mainwindow.h"
 #include <QtMath>
+#include <QStringList>
+
+
+#include "baseui.h"
 
 namespace Ui {
 class CurveCorrection;
@@ -19,16 +22,16 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
     void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
 
 private:
     Ui::CurveCorrection *ui;
 
     void updateGammaPlot(double a, double gamma);
     void updateSPlot(double a, double gamma, unsigned char middlePoint);
-    void updateCustomPlot(double number);
-    MainWindow *getWindow();
+    void updateCustomPlot(QVector<double>& x, QVector<double>& y);
 };
 
 #endif // CURVECORRECTION_H
